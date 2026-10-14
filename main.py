@@ -9,10 +9,15 @@ class SearchRequest(BaseModel):
     array: list[int]
     target: int
 
+@app.get("/")
+def read_root():
+    """서버 연결 상태 확인용 루트 엔드포인트"""
+    return {"status": "ok", "message": "Cloud Run Server is running."}
+
 @app.post("/binary-search")
 def binary_search_trace(req: SearchRequest):
     """
-    이진 검색을 수행하고 각 단계별 상태 기록(Trace)을 반환합니다.
+    이진 검색을 수행하고 각 단계별 상태 기록(Trace)과 시간 복잡도를 반환합니다.
     시간 복잡도: O(log n)
     """
     # 입력받은 배열을 오름차순으로 정렬 (이진 검색의 전제 조건)
@@ -55,7 +60,7 @@ def binary_search_trace(req: SearchRequest):
             step_info["status"] = "go_left"  # 타겟이 더 작으므로 좌측 탐색
             steps.append(step_info)
             high = mid - 1
-            
+                    
     # 탐색 실패 시 최종 상태 기록
     if not found:
         steps.append({
