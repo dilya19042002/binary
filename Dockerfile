@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py .
 
-CMD exec gunicorn --bind :$PORT main:app
+CMD exec gunicorn --bind :$PORT -w 1 -k uvicorn.workers.UvicornWorker main:app
